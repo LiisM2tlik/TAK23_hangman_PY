@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/TAK23_loputoo_PY.iml" filepath="$PROJECT_DIR$/.idea/TAK23_loputoo_PY.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/TAK23_hangman_PY.iml" filepath="$PROJECT_DIR$/.idea/TAK23_hangman_PY.iml" />
     </modules>
   </component>
 </project>
