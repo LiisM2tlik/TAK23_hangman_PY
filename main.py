@@ -1,6 +1,13 @@
 from View import View
+from Controller import Controller
+import Database
 
 
 if __name__ == '__main__':
-    app = View()
-    app.main()
+    Database.create_table()
+    view = View()
+    controller = Controller(view)
+    view.controller = controller
+
+    view.bind("<Return>", controller.send_letter)
+    view.main()

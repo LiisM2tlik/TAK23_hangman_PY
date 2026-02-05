@@ -1,13 +1,14 @@
 from tkinter import *
 from tkinter import Tk, Button, Entry, Label
 
-import controller
+
 
 
 class View(Tk):
     def __init__(self):
         super().__init__()
-        self.controller = controller
+
+        self.controller = None
         self.__width = 600
         self.__height = 600
 
@@ -55,7 +56,8 @@ class View(Tk):
         text_letter.grid(row=0, column=1, padx=5, pady=5)
         text_letter.focus_set()
 
-        btn_send = Button(self.middle_frame, text='Send', command=self.send)
+        btn_send = Button(self.middle_frame, text='Send', command=lambda: self.controller.send_letter())
+        ##btn_send = Button(self.middle_frame, text='Paku täht', command=self.Controller.send_letter())
         btn_send.grid(row=0, column=2, padx=5, pady=5)
 
         lbl_info2 = Label(self.bottom_frame, text='Pakutud')
