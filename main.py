@@ -8,6 +8,6 @@ if __name__ == '__main__':
     view = View()
     controller = Controller(view)
     view.controller = controller
-
+    controller.new_game()
     view.bind("<Return>", controller.send_letter)
     view.main()

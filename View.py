@@ -19,8 +19,15 @@ class View(Tk):
         self.middle_frame = self.create_middle_frame()
         self.bottom_frame = self.create_bottom_frame()
 
-        self.btn_send, self.text_box, self.text_letter, self.features = self.create_frame_features()
+        #spliting middle frame for better view
+        self.middle_left = Frame(self.middle_frame, bg='lightblue')
+        self.middle_left.pack(side='left', fill='y', expand=True)
 
+        self.middle_right = Frame(self.middle_frame, bg='lightgreen')
+        self.middle_right.pack(side='right', fill='y', expand=True)
+
+       ## self.btn_send, self.text_box, self.text_letter, self.features = self.create_frame_features()
+        self.create_widgets()
         self.bind('<Return>', self.send)
 
     def main(self):
@@ -46,36 +53,52 @@ class View(Tk):
         frame.pack(expand=True, fill=X)
         return frame
 
+    def create_widgets(self):
+    ##def create_frame_features(self) -> tuple[Button, Entry, Entry, Label]:
 
-    def create_frame_features(self) -> tuple[Button, Entry, Entry, Label]:
+        lbl_info1 =Label(self.top_frame, text='Paku täht:')
+        lbl_info1.pack(side=LEFT, padx=5, pady=5)
 
-        lbl_info1 =Label(self.middle_frame, text='Paku täht')
-        lbl_info1.grid(row=0, column=0, padx=5, pady=5)
+        self.text_letter = Entry(self.top_frame, width=20)
+        self.text_letter.pack(side=LEFT, padx=5, pady=5)
+        self.text_letter.focus_set()
 
-        text_letter = Entry(self.middle_frame, width=20)
-        text_letter.grid(row=0, column=1, padx=5, pady=5)
-        text_letter.focus_set()
-
-        btn_send = Button(self.middle_frame, text='Send', command=lambda: self.controller.send_letter())
+        self.btn_send = Button(self.top_frame, text='Arva', command=lambda: self.controller.send_letter())
         ##btn_send = Button(self.middle_frame, text='Paku täht', command=self.Controller.send_letter())
-        btn_send.grid(row=0, column=2, padx=5, pady=5)
+        self.btn_send.pack(side=LEFT, padx=5, pady=5)
 
-        lbl_info2 = Label(self.bottom_frame, text='Pakutud')
-        lbl_info2.grid(row=0, column=1, padx=5, pady=5)
+        #word placeholder
+        self.word_place = Label(self.middle_left,
+            text="_ _ _ _ _",  # placeholder, controller updates it
+            font=("Helvetica", 24),
+            bg="lightblue"
+        )
+        self.word_place.pack(padx=5, pady=5)
 
-        text_box = Entry(self.bottom_frame, state='disabled', width=20)
-        text_box.grid(row=1, column=1, padx=5, pady=5)
+        #image placeholder
+        self.image_box = Label(self.middle_right,
+            text="[Hangman Image]",
+            bg="lightblue",
+            font=("Helvetica", 20)
+        )
+        self.image_box.pack(padx=5, pady=5)
 
-        image_box = Label(self.middle_frame, text='Pildikoht')
-        image_box.grid(row=0, column=3, padx=5, pady=5)
-
-        return btn_send, text_box, text_letter, image_box
+        # valed tähed
+        self.wrong_letter = Label(self.bottom_frame,
+            text="Vale tähed: ",
+            bg="lightgreen",
+            font=("Helvetica", 14)
+        )
+        self.wrong_letter.pack(padx=5, pady=5)
 
     def send(self, event=None):
-        letter = self.text_letter.get()
+        if self.controller:
+            self.controller.send_letter()
+            ##
+        ##        letter = self.text_letter.get()
 
-        self.text_box.config(state='normal')
-        self.text_box.insert(END, letter + "\n")
-        self.text_box.config(state='disabled')
+        ##self.text_box.config(state='normal')
+        ##self.text_box.insert(END, letter + "\n")
+        ##self.text_box.config(state='disabled')
 
-        self.text_letter.delete(0, END)
+        ##self.text_letter.delete(0, END)

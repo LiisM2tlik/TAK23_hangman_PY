@@ -3,7 +3,7 @@ import sqlite3
 import random
 
 
-DB_FILE = "database.db"
+DB_FILE = "words.db"
 
 def create_connection(db_file=DB_FILE):
     return sqlite3.connect(db_file)
