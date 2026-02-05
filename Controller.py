@@ -1,4 +1,8 @@
+from random import choice
+
 import Database
+from tkinter import messagebox, simpledialog, Toplevel, Label
+
 
 class Controller:
     def __init__(self, view):
@@ -52,13 +56,35 @@ class Controller:
 
         #pic place holder
         self.view.image_box.config(text=f"[{self.max_attempts - self.attempts_left} / {self.max_attempts}]")
+        self.view.update_hangman_image(self.attempts_left)
 
     def check_game_end(self):
+        # kui võidab
         if all(letter in self.correct_letter for letter in self.word):
-            print("ÕIGE")
-            Database.save_score("Player", self.attempts_left, self.word)
-            self.new_game()
+            # küsi nime
+            player_name = simpledialog.askstring("Õige!", f"Sõna oli '{self.word}'!\nSisesta oma nimi:")
+            if player_name:
+                Database.save_score(player_name, self.attempts_left, self.word)
+            #print("ÕIGE")
+            choice = messagebox.askquestion("Õige!", "Kas uus mäng?\nYes=Uus mäng, No=Vaata tulemusi")
+            if choice == "yes":
+                self.new_game()
+            else:
+                self.show_score()
+
 
         elif self.attempts_left  <= 0:
-            print("EI ÕNNESTUNUD. Sõna oli: ", self.word)
-            self.new_game()
+            choice = messagebox.askquestion("Ei õnnestunud!", f"Sõna oli '{self.word}'\nMida soovid teha?\nYes=Uus mäng, No=Vaata tulemusi")
+            if choice == "yes":
+                self.new_game()
+            else:
+                self.show_score()
+            #print("EI ÕNNESTUNUD. Sõna oli: ", self.word)
+            #self.new_game()
+
+    def show_score(self):
+        scores = Database.get_score()  # will be in Database.py
+        self.view.show_scores(scores)
+
+        #score_text = "\n".join([f"{row[2]}: {row[1]} (Sõna: {row[3]})" for row in scores])
+        #messagebox.showinfo("Tulemused", score_text)

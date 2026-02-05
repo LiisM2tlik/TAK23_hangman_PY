@@ -1,7 +1,8 @@
+from operator import index
 from tkinter import *
 from tkinter import Tk, Button, Entry, Label
-
-
+from tkinter import PhotoImage
+import os
 
 
 class View(Tk):
@@ -67,6 +68,9 @@ class View(Tk):
         ##btn_send = Button(self.middle_frame, text='Paku täht', command=self.Controller.send_letter())
         self.btn_send.pack(side=LEFT, padx=5, pady=5)
 
+        self.btn_new = Button(self.top_frame, text='Uus mäng', command=lambda: self.controller.new_game())
+        self.btn_new.pack(side=LEFT, padx=5, pady=5)
+
         #word placeholder
         self.word_place = Label(self.middle_left,
             text="_ _ _ _ _",  # placeholder, controller updates it
@@ -76,11 +80,7 @@ class View(Tk):
         self.word_place.pack(padx=5, pady=5)
 
         #image placeholder
-        self.image_box = Label(self.middle_right,
-            text="[Hangman Image]",
-            bg="lightblue",
-            font=("Helvetica", 20)
-        )
+        self.image_box = Label(self.middle_right, bg="lightblue")
         self.image_box.pack(padx=5, pady=5)
 
         # valed tähed
@@ -90,6 +90,10 @@ class View(Tk):
             font=("Helvetica", 14)
         )
         self.wrong_letter.pack(padx=5, pady=5)
+
+        self.btn_quit = Button(self.bottom_frame, text='Sule mäng', command=self.destroy)
+        self.btn_quit.pack(side=LEFT, padx=5, pady=5)
+
 
     def send(self, event=None):
         if self.controller:
@@ -102,3 +106,42 @@ class View(Tk):
         ##self.text_box.config(state='disabled')
 
         ##self.text_letter.delete(0, END)
+
+    def show_scores(self, scores):
+
+        win = Toplevel()
+        win.title("Tulemused")
+        win.geometry("400x300")
+
+        header = Label(
+            win, text=f"{'Mängija':<12} {'Skoor':<5} {'Sõna':<10}",
+            font=("Courier", 12, "bold"))
+        header.pack(pady=5)
+
+        for row in scores:
+            player = row[2]
+            score = row[1]
+            word = row[3]
+            row_lable = Label(win, text=f"{player:<12} {score:<5} {word:<10}", font=("Courier", 12))
+            row_lable.pack(anchor='w')
+
+        btn_frame = Frame(win)
+        btn_frame.pack(pady=10)
+
+        btn_new_game = Button(btn_frame, text="Uus mäng", command=lambda: [self.controller.new_game(), win.destroy()])
+        btn_new_game.pack(side=LEFT, padx=5)
+
+        btn_quit = Button(btn_frame, text="Quit", command=win.destroy)
+        btn_quit.pack(side=LEFT, padx=5)
+
+    def load_images(self):
+        images = []
+        for i in range(7):
+            path = os.path.join("images", f"hangman{i}.png")
+            images.append(PhotoImage(file=path))
+        return images
+
+    def update_hangman_image(self, attempts_left):
+        index = len(self.hangman_images) - 1 - attempts_left
+        self.image_box.config(image=self.hagman_images[index])
+        self.image_box.image = self.hangman_image[index]

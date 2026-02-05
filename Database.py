@@ -57,3 +57,11 @@ def save_score(player,score,word):
 
     conn.commit()
     conn.close()
+
+def get_score():
+    conn = create_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM scores ORDER BY time DESC")
+    results = cursor.fetchall()
+    conn.close()
+    return results
