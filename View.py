@@ -1,6 +1,6 @@
 from operator import index
 from tkinter import *
-from tkinter import Tk, Button, Entry, Label
+from tkinter import Tk, Button, Entry, Label, simpledialog
 from tkinter import PhotoImage
 import os
 
@@ -62,15 +62,22 @@ class View(Tk):
         lbl_info1 =Label(self.top_frame, text='Paku täht:')
         lbl_info1.pack(side=LEFT, padx=5, pady=5)
 
-        self.text_letter = Entry(self.top_frame, width=20)
+        vcmd = (self.register(self.validate_letter), "%P")
+        self.text_letter = Entry(self.top_frame, width=20,
+                                 validate="key",
+                                 validatecommand=vcmd)
+
         self.text_letter.pack(side=LEFT, padx=5, pady=5)
         self.text_letter.focus_set()
 
-        self.btn_send = Button(self.top_frame, text='Arva', command=lambda: self.controller.send_letter())
-        ##btn_send = Button(self.middle_frame, text='Paku täht', command=self.Controller.send_letter())
+        self.btn_send = Button(self.top_frame, text='Arva',
+                               command=lambda: self.controller.send_letter())
+        ##btn_send = Button(self.middle_frame, text='Paku täht',
+    #                        command=self.Controller.send_letter())
         self.btn_send.pack(side=LEFT, padx=5, pady=5)
 
-        self.btn_new = Button(self.top_frame, text='Uus mäng', command=lambda: self.controller.new_game())
+        self.btn_new = Button(self.top_frame, text='Uus mäng',
+                              command=lambda: self.controller.new_game())
         self.btn_new.pack(side=LEFT, padx=5, pady=5)
 
         #word placeholder
@@ -156,3 +163,15 @@ class View(Tk):
 
         self.image_box.config(image=self.hangman_images[index])
         self.image_box.image = self.hangman_images[index]
+
+    def validate_letter(self, new_text):
+        return len(new_text) <= 1
+
+    def ask_player_name(self, word):
+        name = simpledialog.askstring(
+            "Õige", f"Sõna oli'{word}'!\nSisesta oma nimi:",
+            parent=self
+        )
+        if name:
+            return name[:10]
+        return None

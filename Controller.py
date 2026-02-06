@@ -62,7 +62,7 @@ class Controller:
         # kui võidab
         if all(letter in self.correct_letter for letter in self.word):
             # küsi nime
-            player_name = simpledialog.askstring("Õige!", f"Sõna oli '{self.word}'!\nSisesta oma nimi:")
+            player_name = self.view.ask_player_name(self.word)
             if player_name:
                 Database.save_score(player_name, self.attempts_left, self.word)
             #print("ÕIGE")
