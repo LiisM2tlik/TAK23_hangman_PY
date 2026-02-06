@@ -9,7 +9,7 @@ class Controller:
         self.view = view
         self.correct_letter = []
         self.wrong_letter = []
-        self.max_attempts = 6
+        self.max_attempts = 12
         self.attempts_left = self.max_attempts
         #self.new_game()
 

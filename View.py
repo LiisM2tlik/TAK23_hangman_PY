@@ -31,6 +31,8 @@ class View(Tk):
         self.create_widgets()
         self.bind('<Return>', self.send)
 
+        self.hangman_images = self.load_images()
+
     def main(self):
         self.mainloop()
 
@@ -85,13 +87,13 @@ class View(Tk):
 
         # valed tähed
         self.wrong_letter = Label(self.bottom_frame,
-            text="Vale tähed: ",
+            text="Valed tähed: ",
             bg="lightgreen",
             font=("Helvetica", 14)
         )
         self.wrong_letter.pack(padx=5, pady=5)
 
-        self.btn_quit = Button(self.bottom_frame, text='Sule mäng', command=self.destroy)
+        self.btn_quit = Button(self.bottom_frame, text='Sulge mäng', command=self.destroy)
         self.btn_quit.pack(side=LEFT, padx=5, pady=5)
 
 
@@ -136,12 +138,21 @@ class View(Tk):
 
     def load_images(self):
         images = []
-        for i in range(7):
-            path = os.path.join("images", f"hangman{i}.png")
-            images.append(PhotoImage(file=path))
+        folder = "images"
+
+        for file in sorted(os.listdir(folder)):
+            if file.endswith(".png"):
+                images.append(PhotoImage(file=os.path.join(folder, file)))
         return images
 
     def update_hangman_image(self, attempts_left):
-        index = len(self.hangman_images) - 1 - attempts_left
-        self.image_box.config(image=self.hagman_images[index])
-        self.image_box.image = self.hangman_image[index]
+        if not self.hangman_images:
+            return
+
+        max_index = len(self.hangman_images) - 1
+        index = max_index - attempts_left
+
+        index = max(0, min(index,max_index))
+
+        self.image_box.config(image=self.hangman_images[index])
+        self.image_box.image = self.hangman_images[index]
